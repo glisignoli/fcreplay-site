@@ -1,0 +1,67 @@
+{% from 'bootstrap/pagination.html' import render_pager, render_pagination %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    {% block styles %}
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }} {% endblock %}
+
+    <title>Your page title</title>
+    {% endblock %}
+  </head>
+  <body>
+    <!-- Your page content -->
+    {% block content %}
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Menu Column -->
+        <div class="col-2">
+          <div class="container">
+            <!-- Logo Row -->
+            <div class="row">
+              <h1>Logo</h1>
+            </div>
+            <!-- Search Row -->
+            <div class="row">
+              {% include 'search.j2.html' %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="col-col-l-9">
+          <!-- Page Content -->
+          <div class="container">
+            <!-- Page Heading -->
+            <h1 class="my-4">
+              Page Heading
+              <small>Secondary Text</small>
+            </h1>
+
+            <!-- Results row -->
+            <div class="row">
+              <!-- Cards -->
+              {% block cards %} {% endblock %}
+            </div>
+            <!-- /.row -->
+
+            <!-- Pagination -->
+            {{ render_pagination(pagination) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %} {% block scripts %}
+    <!-- Optional JavaScript -->
+    {{ bootstrap.load_js() }} {% endblock %}
+  </body>
+</html>
