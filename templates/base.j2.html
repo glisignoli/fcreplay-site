@@ -14,12 +14,11 @@
     <!-- Bootstrap CSS -->
     {{ bootstrap.load_css() }} {% endblock %}
 
-    <title>Your page title</title>
+    <title>FightCade Replays</title>
     {% endblock %}
   </head>
   <body>
     <!-- Your page content -->
-    {% block content %}
     <div class="container-fluid">
       <div class="row">
         <!-- Menu Column -->
@@ -27,7 +26,7 @@
           <div class="container">
             <!-- Logo Row -->
             <div class="row">
-              <h1>Logo</h1>
+              <h1>FightCade Replays</h1>
             </div>
             <!-- Search Row -->
             <div class="row">
@@ -40,27 +39,14 @@
         <div class="col-col-l-9">
           <!-- Page Content -->
           <div class="container">
-            <!-- Page Heading -->
-            <h1 class="my-4">
-              Page Heading
-              <small>Secondary Text</small>
-            </h1>
-
-            <!-- Results row -->
-            <div class="row">
-              <!-- Cards -->
-              {% block cards %} {% endblock %}
-            </div>
-            <!-- /.row -->
-
-            <!-- Pagination -->
-            {{ render_pagination(pagination) }}
+            <!-- Content -->
+            {% block content %} {% endblock %}
           </div>
         </div>
       </div>
     </div>
 
-    {% endblock %} {% block scripts %}
+    {% block scripts %}
     <!-- Optional JavaScript -->
     {{ bootstrap.load_js() }} {% endblock %}
   </body>

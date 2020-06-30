@@ -1,15 +1,13 @@
-<form action="/search" method="POST" role="form">
+{% from 'bootstrap/form.html' import render_field, render_form_row %}
+<form action="/search" method="POST" class="form" role="form">
   <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <button class="btn btn-outline-secondary" type="button">Search</button>
-    </div>
-    <input
-      type="text"
-      name="search"
-      class="form-control"
-      placeholder=""
-      aria-label=""
-      aria-describedby="basic-addon1"
-    />
+    {{ render_field(form.search) }}
+    {{ render_form_row([form.char1, form.char2]) }}
+
+    <small id="CharacterHelp" class="text-muted">
+      Characters will be searched for both players
+    </small>
+    {{ render_form_row([form.player_requested]) }}
+    {{ render_form_row([form.submit]) }}
   </div>
 </form>

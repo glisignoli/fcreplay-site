@@ -1,0 +1,26 @@
+{% extends 'base.j2.html' %} {% block content %}
+<h1 class="my-4">
+  {{ replay.id }}
+</h1>
+<h2>
+    ({{ replay.p1_loc }}) {{ replay.p1 }} vs ({{ replay.p2_loc }}) {{ replay.p2 }}
+</h2>
+<div class="container">
+  <!-- Embedded Video -->
+  <iframe
+    src="https://archive.org/embed/{{ replay.id.replace('@', '-') }}?start={{seek}}"
+    width="640"
+    height="480"
+    frameborder="0"
+    webkitallowfullscreen="true"
+    mozallowfullscreen="true"
+    allowfullscreen
+  ></iframe>
+</div>
+<div class="container">
+<!-- Video Details -->
+  {% for c in characters %}
+  <p>{{ c.p1_char }} vs {{ c.p2_char }} - <a href="/video/{{ replay.id }}?seek={{ c.seek_time }}"> {{ c.vid_time }}</a></p>
+  {% endfor %}
+</div>
+{% endblock %}

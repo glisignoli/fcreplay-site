@@ -1,6 +1,6 @@
-{% extends 'base.j2.html' %}
-{% block cards %}
-{% for replay in replays %}
-  {% include 'card.j2.html' %}
-{% endfor %}
-{% endblock %}
+{% extends 'base.j2.html' %} {% block content %}
+<div class="row">
+  {% for replay in replays %} {% include 'card.j2.html' %} {% endfor %}
+</div>
+<!-- Pagination -->
+{{ render_pagination(pagination) }} {% endblock %}
