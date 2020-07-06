@@ -9,8 +9,22 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-
     {% block styles %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-171247249-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-171247249-1");
+    </script>
+
     <!-- Bootstrap CSS -->
     {{ bootstrap.load_css() }} {% endblock %}
 
@@ -18,36 +32,36 @@
     {% endblock %}
   </head>
   <body>
-    <!-- Your page content -->
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Menu Column -->
-        <div class="col-2">
-          <div class="container">
-            <!-- Logo Row -->
-            <div class="row">
-              <h1>FightCade Replays</h1>
-            </div>
-            <!-- Search Row -->
-            <div class="row">
-              {% include 'search.j2.html' %}
-            </div>
+  <!-- Your page content -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Menu Column -->
+      <div class="col-2">
+        <div class="container">
+          <!-- Logo Row -->
+          <div class="row">
+            <h1>FightCade Replays</h1>
           </div>
-        </div>
-
-        <!-- Content Column -->
-        <div class="col-col-l-9">
-          <!-- Page Content -->
-          <div class="container">
-            <!-- Content -->
-            {% block content %} {% endblock %}
+          <!-- Search Row -->
+          <div class="row">
+            {% include 'search.j2.html' %}
           </div>
         </div>
       </div>
-    </div>
 
-    {% block scripts %}
-    <!-- Optional JavaScript -->
-    {{ bootstrap.load_js() }} {% endblock %}
+      <!-- Content Column -->
+      <div class="col-col-l-9">
+        <!-- Page Content -->
+        <div class="container">
+          <!-- Content -->
+          {% block content %} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% block scripts %}
+  <!-- Optional JavaScript -->
+  {{ bootstrap.load_js() }} {% endblock %}
   </body>
 </html>

@@ -1,6 +1,7 @@
 {% extends 'base.j2.html' %} {% block content %}
 <div class="row">
-  {% for replay in replays %} {% include 'card.j2.html' %} {% endfor %}
+  {% set i=0 %}
+  {% for replay in replays %} {% include 'card.j2.html' %} {% set i=i+1 %} {% endfor %}
 </div>
 <!-- Pagination -->
 {{ render_pagination(pagination) }} {% endblock %}

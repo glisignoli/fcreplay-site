@@ -2,25 +2,40 @@ from flask import Flask, request, render_template, g, session
 from flask import Blueprint
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-
 from flask_wtf import FlaskForm
+
 from wtforms import Form, StringField, BooleanField, SubmitField, SelectField
 
+import os
+import json
 import logging
+
+
+try:
+  import googleclouddebugger
+  googleclouddebugger.enable(
+    breakpoint_enable_canary=True
+  )
+except ImportError:
+  pass
+
+with open("config.json", 'r') as json_data_file:
+    config = json.load(json_data_file)
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./replays.db'
-app.config['SECRET_KEY'] = "YjA0NmNmNzQtYjQxOS00ZWRkLWI4MzItN2U4ZTEwYjk3ODY3Cg=="
+app.config['SQLALCHEMY_DATABASE_URI'] = config['sql_baseurl']
+app.config['SECRET_KEY'] = config['secret_key']
 
 Bootstrap(app)
 db = SQLAlchemy(app)
 
-logging.basicConfig(filename='fcreplay-site.log',
-                    filemode='w', level=logging.DEBUG)
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
-
+print(str(os.environ))
+if not 'INSTANCE_ID' in os.environ: #os.environ['SERVER_SOFTWARE'].startswith('Google App Engine'):
+    logging.basicConfig()#filename='fcreplay-site.log',
+                        #filemode='w', level=logging.DEBUG)
+    logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
 class SearchForm(FlaskForm):
@@ -46,26 +61,32 @@ class SearchForm(FlaskForm):
         ('yang', 'yang'),
         ('yun', 'yun')]
 
+    orderby_list = [
+        ('date_replay', 'Replay Date'),
+        ('date_added', 'Date Added')
+    ]
+
     search = StringField('Search',)
     char1 = SelectField('Character1', choices=characters)
     char2 = SelectField('Character2', choices=characters)
     player_requested = BooleanField('Player Submitted')
+    order_by = SelectField('Order by', choices=orderby_list)
     submit = SubmitField()
 
 
 class Replays(db.Model):
     id = db.Column(db.Text, primary_key=True)
-    p1_loc = db.Column(db.String(3))
-    p2_loc = db.Column(db.String(3))
-    p1 = db.Column(db.String(50))
-    p2 = db.Column(db.String(50))
-    created = db.Column(db.String(3))
-    date_org = db.Column(db.Text)
+    p1_loc = db.Column(db.String)
+    p2_loc = db.Column(db.String)
+    p1 = db.Column(db.String)
+    p2 = db.Column(db.String)
+    date_replay = db.Column(db.DateTime)
     length = db.Column(db.Integer)
-    failed = db.Column(db.String(3))
-    player_requested = db.Column(db.Text)
+    created = db.Column(db.Boolean)
+    failed = db.Column(db.Boolean)
+    status = db.Column(db.String)
     date_added = db.Column(db.Integer)
-
+    player_requested = db.Column(db.Boolean)
 
 class Descriptions(db.Model):
     id = db.Column(db.Text, primary_key=True)
@@ -74,7 +95,7 @@ class Descriptions(db.Model):
 
 class Character_detect(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    challenge = db.Column(db.Text, primary_key=True)
+    challenge_id = db.Column(db.Text, primary_key=True)
     p1_char = db.Column(db.String)
     p2_char = db.Column(db.String)
     vid_time = db.Column(db.String)
@@ -88,7 +109,7 @@ def index():
         Replays.created == 'yes'
     ).filter(
         Replays.failed == 'no'
-    ).order_by(Replays.date_added).paginate(page, per_page=9)
+    ).order_by(Replays.date_added.desc()).paginate(page, per_page=9)
     replays = pagination.items
 
     return(render_template('start.j2.html', pagination=pagination, replays=replays, form=searchForm))
@@ -100,11 +121,12 @@ def search():
     # I feel like there should be a better way to do this
     if request.method == 'POST':
         result = SearchForm(request.form)
-    
+
         search_query = result.search.data
         char1 = result.char1.data
         char2 = result.char2.data
         player_requested = result.player_requested.data
+        order_by = result.order_by.data
 
         searchForm = SearchForm()#(result, char1=char1,
                                 #char2=char2, search=search_query,
@@ -114,11 +136,13 @@ def search():
         session['char1'] = result.char1.data
         session['char2'] = result.char2.data
         session['player_requested'] = result.player_requested.data
+        session['order_by'] = result.order_by.data
     else:
         search_query = session['search']
         char1 = session['char1']
         char2 = session['char2']
         player_requested = session['player_requested']
+        order_by = session['order_by']
 
         searchForm = SearchForm(request.form, char1=char1,
                                 char2=char2, search=search_query,
@@ -132,9 +156,16 @@ def search():
 
     page = request.args.get('page', 1, type=int)
 
+    if order_by == 'date_replay':
+        order = Replays.date_replay.desc()
+    elif order_by == 'date_added':
+        order = Replays.date_added.desc()
+    else:
+        raise LookupError
+
     if (char1 == 'Any' and char2 == 'Any'):
         logging.debug(f'Player Requested: {player_requested}')
-        
+
         pagination = Replays.query.filter(
             Replays.created == 'yes'
         ).filter(
@@ -147,7 +178,7 @@ def search():
                     Descriptions.description.ilike(f'%{search_query}%')
                 )
             )
-        ).paginate(page, per_page=9)
+        ).order_by(order).paginate(page, per_page=9)
     else:
         if char1 == 'Any':
             char1 = '%'
@@ -170,17 +201,17 @@ def search():
             )
         ).filter(
             Replays.id.in_(
-                Character_detect.query.with_entities(Character_detect.challenge).filter(
+                Character_detect.query.with_entities(Character_detect.challenge_id).filter(
                     Character_detect.p1_char.ilike(
                         f'{char1}') & Character_detect.p2_char.ilike(f'{char2}')
                 ).union(
-                    Character_detect.query.with_entities(Character_detect.challenge).filter(
+                    Character_detect.query.with_entities(Character_detect.challenge_id).filter(
                         Character_detect.p1_char.ilike(
                             f'{char2}') & Character_detect.p2_char.ilike(f'{char1}')
                     )
                 )
             )
-        )
+        ).order_by(order)
 
         logging.debug(replay_query)
 
@@ -199,7 +230,7 @@ def videopage(challenge_id):
         Replays.id == challenge_id
     ).first()
     char_detect = Character_detect.query.filter(
-        Character_detect.challenge == challenge_id
+        Character_detect.challenge_id == challenge_id
     ).all()
 
     characters = []
