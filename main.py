@@ -12,12 +12,12 @@ import logging
 
 
 try:
-  import googleclouddebugger
-  googleclouddebugger.enable(
-    breakpoint_enable_canary=True
-  )
+    import googleclouddebugger
+    googleclouddebugger.enable(
+        breakpoint_enable_canary=True
+    )
 except ImportError:
-  pass
+    pass
 
 with open("config.json", 'r') as json_data_file:
     config = json.load(json_data_file)
@@ -31,11 +31,8 @@ app.config['SECRET_KEY'] = config['secret_key']
 Bootstrap(app)
 db = SQLAlchemy(app)
 
-print(str(os.environ))
-if not 'INSTANCE_ID' in os.environ: #os.environ['SERVER_SOFTWARE'].startswith('Google App Engine'):
-    logging.basicConfig()#filename='fcreplay-site.log',
-                        #filemode='w', level=logging.DEBUG)
-    logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
 class SearchForm(FlaskForm):
@@ -88,6 +85,7 @@ class Replays(db.Model):
     date_added = db.Column(db.Integer)
     player_requested = db.Column(db.Boolean)
 
+
 class Descriptions(db.Model):
     id = db.Column(db.Text, primary_key=True)
     description = db.Column(db.Text)
@@ -128,9 +126,9 @@ def search():
         player_requested = result.player_requested.data
         order_by = result.order_by.data
 
-        searchForm = SearchForm()#(result, char1=char1,
-                                #char2=char2, search=search_query,
-                                #player_requested=player_requested)
+        searchForm = SearchForm()  # (result, char1=char1,
+        #char2=char2, search=search_query,
+        # player_requested=player_requested)
 
         session['search'] = result.search.data
         session['char1'] = result.char1.data
@@ -152,7 +150,6 @@ def search():
         player_requested = 'yes'
     else:
         player_requested = 'no'
-
 
     page = request.args.get('page', 1, type=int)
 
@@ -249,6 +246,7 @@ def videopage(challenge_id):
     logging.debug(
         f"Video page, replay: {replay}, characters: {characters}, seek: {seek}")
     return(render_template('video.j2.html', replay=replay, characters=characters, seek=seek, form=searchForm))
+
 
 if __name__ == "__main__":
     app.run(debug=True)

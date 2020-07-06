@@ -32,36 +32,46 @@
     {% endblock %}
   </head>
   <body>
-  <!-- Your page content -->
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Menu Column -->
-      <div class="col-2">
-        <div class="container">
-          <!-- Logo Row -->
-          <div class="row">
-            <h1>FightCade Replays</h1>
-          </div>
-          <!-- Search Row -->
-          <div class="row">
-            {% include 'search.j2.html' %}
+    <!-- Your page content -->
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Menu Column -->
+        <div class="col-2">
+          <div class="container">
+            <!-- Logo Row -->
+            <div class="row">
+              <h1>FightCade Replays</h1>
+            </div>
+            <!-- Search Row -->
+            <div class="row">
+              {% include 'search.j2.html' %}
+            </div>
+            <div class="row">
+              <h1>About</h1>
+              <p>
+                FightCade Replays are genereated using
+                <a href="https://github.com/glisignoli/fcreplay">fcreplay</a>
+              </p>
+              <p>
+                <a href="http://twitter.com/glisignoli">@glisignoli</a>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Content Column -->
-      <div class="col-col-l-9">
-        <!-- Page Content -->
-        <div class="container">
-          <!-- Content -->
-          {% block content %} {% endblock %}
+        <!-- Content Column -->
+        <div class="col-col-l-9">
+          <!-- Page Content -->
+          <div class="container">
+            <!-- Content -->
+            {% block content %} {% endblock %}
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  {% block scripts %}
-  <!-- Optional JavaScript -->
-  {{ bootstrap.load_js() }} {% endblock %}
+    {% block scripts %}
+    <!-- Optional JavaScript -->
+    {{ bootstrap.load_js() }} {% endblock %}
   </body>
 </html>
