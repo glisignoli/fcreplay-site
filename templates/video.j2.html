@@ -18,6 +18,9 @@
   ></iframe>
 </div>
 <div class="container">
+  <p>Archive.org Link: <a href="https://archive.org/details/{{ replay.id.replace('@','-') }}">https://archive.org/details/{{ replay.id.replace('@','-') }}</a></p>
+</div>
+<div class="container">
 <!-- Video Details -->
   {% for c in characters %}
   <p>{{ c.p1_char }} vs {{ c.p2_char }} - <a href="/video/{{ replay.id }}?seek={{ c.seek_time }}"> {{ c.vid_time }}</a></p>
