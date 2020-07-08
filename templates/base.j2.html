@@ -1,88 +1,84 @@
 {% from 'bootstrap/pagination.html' import render_pager, render_pagination %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    {% block head %}
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    {% block styles %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-171247249-1"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
 
-      gtag("config", "UA-171247249-1");
-    </script>
+<head>
+  {% block head %}
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  {% block styles %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171247249-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-    <script
-      data-ad-client="ca-pub-8776104054800875"
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-    ></script>
+    gtag("config", "UA-171247249-1");
+  </script>
 
-    <!-- Bootstrap CSS -->
-    {{ bootstrap.load_css() }} {% endblock %}
+  <script type="text/javascript" src="https://combitly.com/main.js" async></script>
 
-    <title>FightCade Replays</title>
-    {% endblock %}
-  </head>
-  <body>
-    <!-- Your page content -->
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Menu Column -->
-        <div class="col-2">
-          <div class="container">
-            <!-- Logo Row -->
-            <div class="row">
-              <h1>FightCade Replays</h1>
-            </div>
-            <!-- Search Row -->
-            <div class="row">
-              {% include 'search.j2.html' %}
-            </div>
-            <div class="row">
-              <h1>About</h1>
-              <p>
-                FightCade Replays are genereated using
-                <a href="https://github.com/glisignoli/fcreplay">fcreplay</a>
-              </p>
-              <p>
-                <a href="http://twitter.com/glisignoli">@glisignoli</a>
-              </p>
-            </div>
-            <div class="row">
-              <h1>FAQ</h1>
-              <h4>Why are some thumbnails/videos missing?</h4>
-              <p>If the video was recently added, then it is probably still processing. Check back in a little while.</p>
-            </div>
+  <!-- Bootstrap CSS -->
+  {{ bootstrap.load_css() }} {% endblock %}
+
+  <title>FightCade Replays</title>
+  {% endblock %}
+</head>
+
+<body>
+  <!-- Your page content -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Menu Column -->
+      <div class="col-2">
+        <div class="container">
+          <!-- Logo Row -->
+          <div class="row">
+            <h1>FightCade Replays</h1>
           </div>
-        </div>
-
-        <!-- Content Column -->
-        <div class="col-col-l-9">
-          <!-- Page Content -->
-          <div class="container">
-            <!-- Content -->
-            {% block content %} {% endblock %}
+          <!-- Search Row -->
+          <div class="row">
+            {% include 'search.j2.html' %}
+          </div>
+          <div class="row">
+            <h1>About</h1>
+            <p>
+              FightCade Replays are genereated using
+              <a href="https://github.com/glisignoli/fcreplay">fcreplay</a>
+            </p>
+            <p>
+              <a href="http://twitter.com/glisignoli">@glisignoli</a>
+            </p>
+          </div>
+          <div class="row">
+            <h1>FAQ</h1>
+            <h4>Why are some thumbnails/videos missing?</h4>
+            <p>If the video was recently added, then it is probably still processing. Check back in a little while.</p>
+          </div>
+          <div class="row">
+          <div class="xc449bad4854773ff" data-zone="6a8c942f61004570845fbabef913cec6" style="width:300px;height:250px;display: inline-block;margin: 0 auto"></div>
           </div>
         </div>
       </div>
-    </div>
 
-    {% block scripts %}
-    <!-- Optional JavaScript -->
-    {{ bootstrap.load_js() }} {% endblock %}
-  </body>
+      <!-- Content Column -->
+      <div class="col-col-l-9">
+        <!-- Page Content -->
+        <div class="container">
+          <!-- Content -->
+          {% block content %} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% block scripts %}
+  <!-- Optional JavaScript -->
+  {{ bootstrap.load_js() }} {% endblock %}
+</body>
+
 </html>
