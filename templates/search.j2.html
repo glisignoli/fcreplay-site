@@ -1,21 +1,44 @@
 {% from 'bootstrap/form.html' import render_field, render_form_row %}
 <form action="/search" method="POST" class="form" role="form">
-  <div class="input-group mb-3">
-    {{ render_field(form.search) }}
-  </div>
-  <div class="input-group mb-3">
-    {{ render_form_row([form.char1, form.char2]) }}
-    <small id="CharacterHelp" class="text-muted">
-      Characters will be searched for both players
-    </small>
-  </div>
-  <div class="input-group mb-3">
-    {{ render_form_row([form.player_requested]) }}
-  </div>
-  <div class="input-group mb-3">
-    {{ render_form_row([form.order_by]) }}
-  </div>
-  <div class="input-group mb-3">
-    {{ render_form_row([form.submit]) }}
-  </div>
+  <ul>
+    <div class="input-group top-buffer">
+      <label for="search" class="bmd-label-floating">
+        Search
+      </label>
+      <input type="text" class="form-control" id="search" name="search" />
+    </div>
+
+    <div class="input-group top-buffer">
+      <div class="row">
+        <div class="col">
+          {{ render_field(form.char1) }}
+        </div>
+        <div class="col">
+          {{ render_field(form.char2) }}
+        </div>
+      </div>
+      <small id="CharacterHelp" class="text-muted">
+        Characters will be searched for both players
+      </small>
+    </div>
+
+    <div class="input-group top-buffer">
+      <div class="form-check">
+        <label class="form-check-label">
+          <input class="form-check-input is-invalid" id="player_requested" name="player_requested" type="checkbox" value="y">
+          Player Submitted
+          <span class="form-check-sign">
+            <span class="check"></span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="input-group top-buffer">
+      {{ render_form_row([form.order_by]) }}
+    </div>
+    <div class="input-group top-buffer">
+      {{ render_form_row([form.submit]) }}
+    </div>
+  </ul>
 </form>

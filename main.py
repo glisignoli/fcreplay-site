@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, g, session
+from flask import Flask, request, render_template, g, session, send_from_directory
 from flask import Blueprint
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -63,11 +63,11 @@ class SearchForm(FlaskForm):
         ('date_added', 'Date Added')
     ]
 
-    search = StringField('Search',)
-    char1 = SelectField('Character1', choices=characters)
-    char2 = SelectField('Character2', choices=characters)
+    search = StringField()
+    char1 = SelectField('Character1', choices=characters, render_kw={'class': 'fixed'})
+    char2 = SelectField('Character2', choices=characters, render_kw={'class': 'fixed'})
     player_requested = BooleanField('Player Submitted')
-    order_by = SelectField('Order by', choices=orderby_list)
+    order_by = SelectField('Order by', choices=orderby_list, render_kw={'class': 'fixed'})
     submit = SubmitField()
 
 
@@ -112,6 +112,9 @@ def index():
 
     return(render_template('start.j2.html', pagination=pagination, replays=replays, form=searchForm))
 
+@app.route('/assets/<path:path>')
+def send_js(path):
+    return send_from_directory('templates/assets', path)
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
