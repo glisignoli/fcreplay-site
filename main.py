@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, g, session, send_from_directory
+from flask import Flask, request, render_template, g, session, send_from_directory, redirect, url_for
 from flask import Blueprint
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -129,15 +129,14 @@ def search():
         player_requested = result.player_requested.data
         order_by = result.order_by.data
 
-        searchForm = SearchForm()  # (result, char1=char1,
-        #char2=char2, search=search_query,
-        # player_requested=player_requested)
+        searchForm = SearchForm()
 
         session['search'] = result.search.data
         session['char1'] = result.char1.data
         session['char2'] = result.char2.data
         session['player_requested'] = result.player_requested.data
         session['order_by'] = result.order_by.data
+        return redirect(url_for('search'))
     else:
         search_query = session['search']
         char1 = session['char1']
@@ -179,6 +178,7 @@ def search():
                 )
             )
         ).order_by(order).paginate(page, per_page=9)
+
     else:
         if char1 == 'Any':
             char1 = '%'
