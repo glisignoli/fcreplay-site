@@ -5,12 +5,12 @@
 ```console
 python3 -m venv ./venv
 source ./venv/bin/activate
-pip install flask bootstrap-flask flask-sqlalchemy
+pip install -r requirements.txt
 ```
 
 ## Running
 
 ```console
 source ./venv/bin/activate
-flask run --host=127.0.0.1 --port=5000
+FLASK_APP=main.py flask run --host=127.0.0.1 --port=5000
 ```
