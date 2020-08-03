@@ -71,6 +71,12 @@ class SearchForm(FlaskForm):
     submit = SubmitField()
 
 
+class SubmitForm(FlaskForm):
+    player_id = StringField()
+    challenge_url = StringField()
+    submit = SubmitField()
+
+
 class Replays(db.Model):
     id = db.Column(db.Text, primary_key=True)
     p1_loc = db.Column(db.String)
@@ -111,6 +117,29 @@ def index():
     replays = pagination.items
 
     return(render_template('start.j2.html', pagination=pagination, replays=replays, form=searchForm))
+
+@app.route('/submit')
+def submit():
+    searchForm = SearchForm()
+    submitForm = SubmitForm()
+    return(render_template('submit.j2.html', form=searchForm, submitForm=submitForm))
+
+@app.route('/submitResult')
+def submitResult():
+    logging.debug(f"Session: {session}")
+    # I feel like there should be a better way to do this
+    if request.method == 'POST':
+        result = SearchForm(request.submitForm)
+
+        player_id = result.player_id.data
+        challenge_id = result.challenge_url.data
+        session['player_id'] = result.player_id.data
+        session['challenge_url'] = result.challenge_url.data
+
+        # Add replay and get status here
+        return redirect(url_for('search'))
+    else:
+        return(render_template('submitResult.j2.html'))
 
 @app.route('/assets/<path:path>')
 def send_js(path):

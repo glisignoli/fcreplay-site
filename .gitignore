@@ -1,4 +1,5 @@
 venv
+venvnew
 __pycache__
 fcreplay-site.log
 .vscode
