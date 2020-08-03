@@ -1,0 +1,31 @@
+{% extends 'dashboard.j2.html' %} {% block content %} {% from
+'bootstrap/form.html' import render_field, render_form_row %}
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header card-header-primary">
+      <h4 class="card-title">
+        Submit Replay
+      </h4>
+    </div>
+    <div class="card-body">
+      <form action="/submitResult" method="POST" class="form" role="form">
+        <ul>
+          <div class="input-group top-buffer">
+            <div class="row">
+              <div class="col">
+                {{ render_field(submitForm.player_id) }}
+              </div>
+              <div class="col">
+                {{ render_field(submitForm.challenge_url) }}
+              </div>
+            </div>
+          </div>
+        </ul>
+        <div class="row">
+          {{ render_field(submitForm.submit) }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
